@@ -866,11 +866,11 @@ def i18n_enabled():
 
 @register.simple_tag(takes_context=True)
 def locales(context=None):
-    # Use `all_locales` from context if set to avoid an extra query.
-    if context and context.get("all_locales"):
-        all_locales = context["all_locales"]
+    # Use `wagtail_locales` from context if set to avoid an extra query.
+    if context and context.get("wagtail_locales"):
+        locales = context["wagtail_locales"]
     else:
-        all_locales = Locale.objects.all()
+        locales = Locale.objects.all()
 
     return json.dumps(
         [
@@ -878,7 +878,7 @@ def locales(context=None):
                 "code": locale.language_code,
                 "display_name": force_str(locale.get_display_name()),
             }
-            for locale in all_locales
+            for locale in locales
         ]
     )
 
