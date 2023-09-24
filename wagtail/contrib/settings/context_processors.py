@@ -1,4 +1,6 @@
-from wagtail.contrib.settings.models import BaseGenericSetting, BaseSiteSetting
+from django.utils.functional import SimpleLazyObject
+
+from wagtail.contrib.settings.models import AbstractSiteSetting, BaseGenericSetting, BaseSiteSetting
 from wagtail.models import Site
 
 from .registry import registry
@@ -51,7 +53,7 @@ class SettingModuleProxy(dict):
 
         if issubclass(Model, BaseGenericSetting):
             return Model.load(request_or_site=self.request_or_site)
-        elif issubclass(Model, BaseSiteSetting):
+        elif issubclass(Model, AbstractSiteSetting):
             if self.request_or_site is not None:
                 if isinstance(self.request_or_site, Site):
                     return Model.for_site(self.request_or_site)
